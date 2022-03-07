@@ -28,11 +28,13 @@ class Player:
         # Set media playlist
         self.media.set_media_list(self.playlist)
 
-    def add_media(self, file):
+    def add_media(self, mrls):
         """
         Add media to playlist
         """
-        self.playlist.add_media(file)
+        # for file in mrls:
+        #     self.playlist.add_media(file)
+        [self.playlist.add_media(file) for file in mrls]
 
     def play(self):
         """
