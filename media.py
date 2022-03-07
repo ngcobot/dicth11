@@ -1,9 +1,10 @@
 import os
+from modules.helper import scan_files
 
 from player import Player
 from view.ui import Ui_MainWindow
 
-from PyQt5.QtWidgets import QMainWindow, QApplication, QAction, QMenu
+from PyQt5.QtWidgets import QMainWindow, QApplication, QAction, QMenu, QFileDialog
 from PyQt5.QtGui import QIcon
 
 
@@ -11,6 +12,10 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
     """
     Media player (GUI)
     """
+
+    # defaults
+    home_directory = os.environ.get("HOME")
+    default_dir = os.path.join(home_directory, "Videos")
 
     def __init__(self, *args, **kwargs):
         super(MediaPlayer, self).__init__(*args, **kwargs)
@@ -72,6 +77,7 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
         previous_button = context_menu.addAction("Previous")
 
         context_menu.addSeparator()
+
         playlist_button = context_menu.addAction("Playlist")
 
         impMenu = QMenu("Open Media", self)
@@ -91,7 +97,7 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
             self.player.pause()
         elif action == stop_button:
             self.player.stop()
-            self.reset_ui()
+            self.update()
         elif action == open_file:
             self.open_files()
         elif action == open_dir:
@@ -100,11 +106,48 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
             self.player.next()
             print(self.player.get_title())
         elif action == previous_button:
-            self.player.previous_media()
-            print(self.player.get_title())
+            self.player.previous()
         elif action == playlist_button:
-            # self.videoFrame.hide()
+            # TODO : Add playlist video mode toggle
             self.player.pause()
-            self.frame_2.show()
-            self.treeWidget.show()
-            self.update()
+
+    def open_files(self):
+        """
+        Open media files
+        """
+
+        file, _ = QFileDialog.getOpenFileNames(
+            self,
+            "Open file",
+            MediaPlayer.default_dir,
+            "MPEG-4 (*.bin *.mp4);;"
+            "All files (*.mp4* *.mp3* *.bin* *.mkv* *.avi* *.webm*)",
+        )
+
+        self.set_uri(file)
+
+    def open_folder(self):
+        """
+        Open a folder and look for media files to play
+        """
+
+        files_found = QFileDialog.getExistingDirectory(
+            self,
+            "Open Dir",
+            self.default_dir,
+            QFileDialog.DontResolveSymlinks,
+        )
+
+        _, files = scan_files(files_found, ".mp4")
+
+        files.sort(key=os.path.getctime)
+
+        self.set_uri(files)
+
+    def set_uri(self, mrls):
+        """
+        Set media uri an play items
+        """
+        self.player.add_media(mrls)
+        if not self.player.is_playing():
+            self.player.play()
