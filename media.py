@@ -162,9 +162,7 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
         """
         Set main window to fullscreen
         """
-        if self.fullscreen_mode:
+        if self.isFullScreen():
             self.showNormal()
-            self.fullscreen_mode = False
         else:
             self.showFullScreen()
-            self.fullscreen_mode = True
