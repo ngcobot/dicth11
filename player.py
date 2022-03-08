@@ -91,6 +91,22 @@ class Player:
         else:
             self.m_instance.audio_set_mute(False)
 
+    def volume_up(self):
+        """
+        Set current software audio volume.
+        """
+        current_volume = self.m_instance.audio_get_volume()
+        if current_volume <= 100:
+            return self.m_instance.audio_set_volume(current_volume + 5)
+
+    def volume_down(self):
+        """
+        Set current software audio volume.
+        """
+        current_volume = self.m_instance.audio_get_volume()
+        if current_volume >= 0:
+            return self.m_instance.audio_set_volume(current_volume - 5)
+
     def is_playing(self):
         """
         Is media list playing?
