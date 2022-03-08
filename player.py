@@ -202,6 +202,16 @@ class Player:
         else:
             self.set_time(abs(time - 10000))
 
+    def video_set_scale(self):
+        """
+        Video scale/ Zoom to fit window
+        """
+        video_scale = self.m_instance.video_get_scale()
+        if video_scale == 0.0:
+            self.m_instance.video_set_scale(1)
+        else:
+            self.m_instance.video_set_scale(0)
+
     def set_window(self, wm_id):
         """
         Set an X Window System drawable where the media player should render its video output.
