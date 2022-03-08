@@ -123,8 +123,21 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
         elif action == previous_button:
             self.player.previous()
         elif action == playlist_button:
-            # TODO : Add playlist video mode toggle
             self.player.pause()
+            self.toggle_playlist_video_view()
+
+    def toggle_playlist_video_view(self):
+        """
+        Toggle between video view and playlist
+        """
+        if self.videoFrame.isVisible():
+            self.videoFrame.hide()
+            self.mainFrame.show()
+            self.update()
+        else:
+            self.mainFrame.hide()
+            self.videoFrame.show()
+            self.update()
 
     def open_files(self):
         """
