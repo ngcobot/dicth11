@@ -31,6 +31,20 @@ class Player:
         # Set media playlist
         self.media.set_media_list(self.playlist)
 
+    def event_manager(self):
+        """
+        MediaListPlayer  event manger
+        """
+        return self.media.get_media_player().event_manager()
+
+    def event_manager_attach_changed(self, attach):
+        """
+        @param: method that is called every time the event is
+        captured by the event manager
+        """
+        event_manager = self.media.get_media_player().event_manager()
+        event_manager.event_attach(vlc.EventType.MediaPlayerMediaChanged, attach)
+
     def add_media(self, mrls):
         """
         Add media to playlist
@@ -273,7 +287,7 @@ class Player:
         self.video_set_marquee_int(vlc.VideoMarqueeOption.X, 20)
         self.video_set_marquee_string(m_str)
 
-    def set_title_marquee(self):
+    def set_title_marquee(self, *event):
         """
         Set video title
         """

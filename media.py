@@ -72,6 +72,9 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
         # Hide playlist widget
         self.mainFrame.hide()
 
+        # VLC Event handler
+        self.player.event_manager_attach_changed(self.player.set_title_marquee)
+
     def contextMenuEvent(self, event):
         """
         Context menu
