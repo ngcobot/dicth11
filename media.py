@@ -86,6 +86,11 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
         else:
             button_text = "Play"
 
+        if self.videoFrame.isVisible():
+            playlist_text = "Playlist"
+        else:
+            playlist_text = "Video view"
+
         play_button = context_menu.addAction(button_text)
         stop_button = context_menu.addAction("Stop")
         next_button = context_menu.addAction("Next")
@@ -93,7 +98,7 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
 
         context_menu.addSeparator()
 
-        playlist_button = context_menu.addAction("Playlist")
+        playlist_button = context_menu.addAction(playlist_text)
 
         impMenu = QMenu("Open Media", self)
         open_file = QAction("Open File..", self)
