@@ -6,8 +6,15 @@ from player import Player
 from view.ui import Ui_MainWindow
 from modules.helper import scan_files
 
-from PyQt5.QtWidgets import QMainWindow, QApplication, QAction, QMenu, QFileDialog
-from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import (
+    QMainWindow,
+    QApplication,
+    QAction,
+    QMenu,
+    QFileDialog,
+    QShortcut,
+)
+from PyQt5.QtGui import QIcon, QKeySequence
 
 
 class MediaPlayer(QMainWindow, Ui_MainWindow):
@@ -28,6 +35,9 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
 
         # Initilise UI
         self.initialise_ui()
+
+        # Media player keybaord shortcuts
+        self.keyboard_shortcuts()
 
         self.show()
 
@@ -203,3 +213,86 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
             self.showNormal()
         else:
             self.showFullScreen()
+
+    # -----------------------------------------------------------------------------------------------
+    # Media player keyboard shortcuts
+    # -----------------------------------------------------------------------------------------------
+    def keyboard_shortcuts(self):
+        """
+        Keyboard shotcuts
+        """
+        # Close application
+        self.shortcut_quit = QShortcut(QKeySequence("Ctrl+Q"), self)
+        self.shortcut_quit.activated.connect(self.close)
+
+        # Fullscreen F
+        self.shortcut_fullscreen = QShortcut(QKeySequence("F"), self)
+        self.shortcut_fullscreen.activated.connect(self.mouseDoubleClickEvent)
+
+        # Open files
+        self.shortcut_open = QShortcut(QKeySequence("Ctrl+O"), self)
+        self.shortcut_open.activated.connect(self.open_files)
+
+        # Open folder
+        self.shortcut_open_folder = QShortcut(QKeySequence("Ctrl+Shift+O"), self)
+        self.shortcut_open_folder.activated.connect(self.open_folder)
+
+        # Mute audio
+        self.shortcut_mute = QShortcut(QKeySequence("M"), self)
+        self.shortcut_mute.activated.connect(self.player.mute_audio)
+
+        # Pause/resume
+        self.shortcut_pause = QShortcut(QKeySequence("Space"), self)
+        self.shortcut_pause.activated.connect(self.player.pause)
+
+        # Stop media
+        self.shortcut_stop = QShortcut(QKeySequence("S"), self)
+        self.shortcut_stop.activated.connect(self.player.stop)
+
+        # Next media
+        self.shortcut_next = QShortcut(QKeySequence("N"), self)
+        self.shortcut_next.activated.connect(self.player.next)
+
+        # Next media second option
+        self.shortcut_next_2 = QShortcut(QKeySequence("0"), self)
+        self.shortcut_next_2.activated.connect(self.player.next)
+
+        # Previous media
+        self.shortcut_previous = QShortcut(QKeySequence("P"), self)
+        self.shortcut_previous.activated.connect(self.player.previous)
+
+        # Previous media second option
+        self.shortcut_previous_2 = QShortcut(QKeySequence("."), self)
+        self.shortcut_previous_2.activated.connect(self.player.previous)
+
+        # # 10 seconds media skip
+        # self.shortcut_forward = QShortcut(QKeySequence("Right"), self)
+        # self.shortcut_forward.activated.connect(self.media_forward)
+
+        # # 10 seconds backward skip
+        # self.shortcut_backward = QShortcut(QKeySequence("Left"), self)
+        # self.shortcut_backward.activated.connect(self.media_backward)
+
+        # # Volume up by 10dB
+        self.shortcut_volume_up = QShortcut(QKeySequence("Up"), self)
+        self.shortcut_volume_up.activated.connect(self.player.volume_up)
+
+        # # Volume down by 10dB
+        self.shortcut_volume_down = QShortcut(QKeySequence("Down"), self)
+        self.shortcut_volume_down.activated.connect(self.player.volume_down)
+
+        # # Aspect ratio
+        # self.shortcut_aspect_ratio = QShortcut(QKeySequence("O"), self)
+        # self.shortcut_aspect_ratio.activated.connect(self.original_scale)
+
+        # # Show current media timestamp
+        # self.shortcut_timestamp = QShortcut(QKeySequence("T"), self)
+        # self.shortcut_timestamp.activated.connect(self.media_timestamp)
+
+        # # Next frame timestamp
+        self.shortcut_next_frame = QShortcut(QKeySequence("E"), self)
+        self.shortcut_next_frame.activated.connect(self.player.next_frame)
+
+        # # Media player playback mode
+        # self.shortcut_player_mode = QShortcut(QKeySequence("L"), self)
+        # self.shortcut_player_mode.activated.connect(self.playback_mode)
