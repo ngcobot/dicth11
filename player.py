@@ -81,6 +81,16 @@ class Player:
         """
         return self.media.stop()
 
+    def mute_audio(self):
+        """
+        Mute media audio
+        """
+        m_status = self.m_instance.audio_get_mute()
+        if not m_status:
+            self.m_instance.audio_set_mute(True)
+        else:
+            self.m_instance.audio_set_mute(False)
+
     def is_playing(self):
         """
         Is media list playing?
