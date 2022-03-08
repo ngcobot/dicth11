@@ -22,8 +22,11 @@ class Player:
         # Media playlist
         self.playlist = vlc.MediaList()
 
+        # Media playback mode
+        self.mode = vlc.PlaybackMode.loop
+
         # Set default media plsylist mode loop through all the media
-        self.media.set_playback_mode(vlc.PlaybackMode.loop)
+        self.media.set_playback_mode(self.mode)
 
         # Set media playlist
         self.media.set_media_list(self.playlist)
@@ -211,6 +214,20 @@ class Player:
             self.m_instance.video_set_scale(1)
         else:
             self.m_instance.video_set_scale(0)
+
+    def set_playback_mode(self):
+        """
+        Set media playlist playback mode
+        """
+        if self.mode == vlc.PlaybackMode.loop:
+            self.mode = vlc.PlaybackMode.repeat
+            self.media.set_playback_mode(self.mode)
+        elif self.mode == vlc.PlaybackMode.repeat:
+            self.mode = vlc.PlaybackMode.default
+            self.media.set_playback_mode(self.mode)
+        else:
+            self.mode = vlc.PlaybackMode.loop
+            self.media.set_playback_mode(self.mode)
 
     def set_window(self, wm_id):
         """
