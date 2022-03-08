@@ -207,6 +207,7 @@ class Player:
 
         else:
             self.set_time(time + 10000)
+            self.show_media_timestamp()
 
     def back_forward(self):
         """
@@ -218,6 +219,7 @@ class Player:
             self.set_time(0)
         else:
             self.set_time(abs(time - 10000))
+            self.show_media_timestamp()
 
     def video_set_scale(self):
         """
