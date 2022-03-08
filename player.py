@@ -114,6 +114,7 @@ class Player:
         """
         current_volume = self.m_instance.audio_get_volume()
         if current_volume <= 190:
+            self.set_marquee("Volume: " + str(current_volume))
             return self.m_instance.audio_set_volume(current_volume + 5)
 
     def volume_down(self):
@@ -122,6 +123,7 @@ class Player:
         """
         current_volume = self.m_instance.audio_get_volume()
         if current_volume >= 0:
+            self.set_marquee("Volume: " + str(current_volume))
             return self.m_instance.audio_set_volume(current_volume - 5)
 
     def is_playing(self):
