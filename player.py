@@ -96,7 +96,7 @@ class Player:
         Set current software audio volume.
         """
         current_volume = self.m_instance.audio_get_volume()
-        if current_volume <= 100:
+        if current_volume <= 190:
             return self.m_instance.audio_set_volume(current_volume + 5)
 
     def volume_down(self):
@@ -153,6 +153,54 @@ class Player:
         Get paying media length in ms
         """
         return self.convert_ms(self.media.get_media_player().get_length())
+
+    def next_frame(self):
+        """
+        Get the nest frame on the media
+        """
+        return self.m_instance.next_frame()
+
+    def set_time(self, time_ms):
+        """
+        Set the movie time (in ms).
+        @param time_ms: the movie time (in ms).
+        """
+        self.m_instance.set_time(time_ms)
+
+    def get_media_current_time(self):
+        """
+        Media current time
+        """
+        return self.m_instance.get_time()
+
+    def fast_forward(self):
+        """
+        10 seconds fast forward
+        """
+        duration = self.media.get_media_player().get_length()
+        time = int(self.get_media_current_time())
+
+        # check if the media is 1s from ending
+        if (time + 130) > duration:
+            return
+        # play the next media if media has reached end of duration
+        elif (time + 120) >= duration:
+            # self.player.set_time(duration)
+            self.next()
+
+        else:
+            self.set_time(time + 10000)
+
+    def back_forward(self):
+        """
+        Backward skip media time by 10s
+        """
+        time = int(self.get_media_current_time())  # media running time
+
+        if time - 10000 < 0:
+            self.set_time(0)
+        else:
+            self.set_time(abs(time - 10000))
 
     def set_window(self, wm_id):
         """
