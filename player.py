@@ -238,12 +238,15 @@ class Player:
         if self.mode == vlc.PlaybackMode.loop:
             self.mode = vlc.PlaybackMode.repeat
             self.media.set_playback_mode(self.mode)
+            self.set_marquee("Loop: One")
         elif self.mode == vlc.PlaybackMode.repeat:
             self.mode = vlc.PlaybackMode.default
             self.media.set_playback_mode(self.mode)
+            self.set_marquee("Loop: Off")
         else:
             self.mode = vlc.PlaybackMode.loop
             self.media.set_playback_mode(self.mode)
+            self.set_marquee("Loop: All")
 
     def set_window(self, wm_id):
         """
