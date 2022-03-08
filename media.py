@@ -1,8 +1,10 @@
 import os
-from modules.helper import scan_files
+from pathlib import Path
+
 
 from player import Player
 from view.ui import Ui_MainWindow
+from modules.helper import scan_files
 
 from PyQt5.QtWidgets import QMainWindow, QApplication, QAction, QMenu, QFileDialog
 from PyQt5.QtGui import QIcon
@@ -144,6 +146,22 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
 
         self.set_uri(files)
 
+    def dragEnterEvent(self, event):
+        """
+        Listen to drag enter events i.e accept drag enter events
+        """
+        event.accept()
+
+    def dropEvent(self, event) -> None:
+        """
+        Drop media onto application to play -  event handler
+
+        """
+        # scan through the url/folders draged
+        #  to the mainwindow to play media
+        files = self.convert_qurl_path(event.mimeData().urls())
+        self.set_uri(files)
+
     def set_uri(self, mrls):
         """
         Set media uri an play items
@@ -151,6 +169,31 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
         self.player.add_media(mrls)
         if not self.player.is_playing():
             self.player.play()
+
+    @staticmethod
+    def convert_qurl_path(urls):
+        """
+        Convert QUrl to Path(linux)
+        """
+        url_path = []
+        _found_files = []
+
+        # clean urls to paths
+        for url in urls:
+            # Convert QUrl to Path(linux)
+            url_path.append(Path(url.path()))
+
+            # check for folders and files
+        for path in url_path:
+            # Get the files matching the extension from the folder
+            if path.is_dir():
+                _, files = scan_files(path, ".mp4")
+                [_found_files.append(file) for file in files]
+            elif path.is_file():
+                # files.append(os.fspath(path))
+                _found_files.append(os.fspath(path))
+
+        return _found_files
 
     def mouseDoubleClickEvent(self, *event):
         """
