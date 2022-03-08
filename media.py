@@ -100,12 +100,12 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
 
         playlist_button = context_menu.addAction(playlist_text)
 
-        impMenu = QMenu("Open Media", self)
+        open_menu = QMenu("Open Media", self)
         open_file = QAction("Open File..", self)
         open_dir = QAction("Open Directory..", self)
-        impMenu.addAction(open_file)
-        impMenu.addAction(open_dir)
-        sub_menu = context_menu.addMenu(impMenu)
+        open_menu.addAction(open_file)
+        open_menu.addAction(open_dir)
+        sub_menu = context_menu.addMenu(open_menu)
 
         context_menu.addSeparator()
         quitAct = context_menu.addAction("Quit")
