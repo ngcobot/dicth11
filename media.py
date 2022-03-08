@@ -156,12 +156,6 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
         """
         Listen to mouse double click event and toggle UI fullscreen
         """
-        self.fullscreen()
-
-    def fullscreen(self):
-        """
-        Set main window to fullscreen
-        """
         if self.isFullScreen():
             self.showNormal()
         else:
