@@ -245,6 +245,45 @@ class Player:
         elif sys.platform == "darwin":  # for MacOS
             self.m_instance.set_nsobject(wm_id)
 
+    def video_set_marquee_int(self, option, value):
+        """
+        Vide marquee int (Add options)
+        """
+        return self.m_instance.video_set_marquee_int(option, value)
+
+    def video_set_marquee_string(self, marquee_str):
+        """
+        Set a marquee string option
+        @param
+        """
+        return self.m_instance.video_set_marquee_string(
+            vlc.VideoMarqueeOption.Text, marquee_str
+        )
+
+    def set_marquee(self, m_str):
+        """
+        Set marquee string
+        @param string
+        """
+        self.video_set_marquee_int(vlc.VideoMarqueeOption.Enable, 1)
+        self.video_set_marquee_int(vlc.VideoMarqueeOption.Size, 24)
+        self.video_set_marquee_int(vlc.VideoMarqueeOption.Timeout, 1500)
+        self.video_set_marquee_int(vlc.VideoMarqueeOption.Position, 6)
+        self.video_set_marquee_int(vlc.VideoMarqueeOption.Y, 20)
+        self.video_set_marquee_int(vlc.VideoMarqueeOption.X, 20)
+        self.video_set_marquee_string(m_str)
+
+    def set_title_marquee(self):
+        """
+        Set video title
+        """
+        self.video_set_marquee_int(vlc.VideoMarqueeOption.Enable, 1)
+        self.video_set_marquee_int(vlc.VideoMarqueeOption.Size, 38)
+        self.video_set_marquee_int(vlc.VideoMarqueeOption.Timeout, 1500)
+        self.video_set_marquee_int(vlc.VideoMarqueeOption.Position, 8)
+
+        self.video_set_marquee_string(self.get_title())
+
     @staticmethod
     # Convert millis to format  hr:min:ss format
     def convert_ms(millis: int):

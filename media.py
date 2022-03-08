@@ -289,6 +289,10 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
         # self.shortcut_timestamp = QShortcut(QKeySequence("T"), self)
         # self.shortcut_timestamp.activated.connect(self.media_timestamp)
 
+        # Show current media title
+        self.shortcut_title = QShortcut(QKeySequence("I"), self)
+        self.shortcut_title.activated.connect(self.player.set_title_marquee)
+
         # Next frame
         self.shortcut_next_frame = QShortcut(QKeySequence("E"), self)
         self.shortcut_next_frame.activated.connect(self.player.next_frame)
