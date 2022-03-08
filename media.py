@@ -288,9 +288,9 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
         self.shortcut_aspect_ratio = QShortcut(QKeySequence("O"), self)
         self.shortcut_aspect_ratio.activated.connect(self.player.video_set_scale)
 
-        # # Show current media timestamp
-        # self.shortcut_timestamp = QShortcut(QKeySequence("T"), self)
-        # self.shortcut_timestamp.activated.connect(self.media_timestamp)
+        # Show current media timestamp
+        self.shortcut_timestamp = QShortcut(QKeySequence("T"), self)
+        self.shortcut_timestamp.activated.connect(self.player.show_media_timestamp)
 
         # Show current media title
         self.shortcut_title = QShortcut(QKeySequence("I"), self)

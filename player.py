@@ -298,6 +298,16 @@ class Player:
 
         self.video_set_marquee_string(self.get_title())
 
+    def show_media_timestamp(self, *event):
+        """
+        Show the current media timestamp
+        """
+        time = int(self.get_media_current_time())  # media running time
+        duration = self.get_media_length()  # media duration
+
+        marquee_str = f"{self.convert_ms(time)}/{duration}"
+        self.set_marquee(marquee_str)
+
     @staticmethod
     # Convert millis to format  hr:min:ss format
     def convert_ms(millis: int):
