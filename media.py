@@ -266,12 +266,12 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
         self.shortcut_previous_2.activated.connect(self.player.previous)
 
         # # 10 seconds media skip
-        # self.shortcut_forward = QShortcut(QKeySequence("Right"), self)
-        # self.shortcut_forward.activated.connect(self.media_forward)
+        self.shortcut_forward = QShortcut(QKeySequence("Right"), self)
+        self.shortcut_forward.activated.connect(self.player.fast_forward)
 
         # # 10 seconds backward skip
-        # self.shortcut_backward = QShortcut(QKeySequence("Left"), self)
-        # self.shortcut_backward.activated.connect(self.media_backward)
+        self.shortcut_backward = QShortcut(QKeySequence("Left"), self)
+        self.shortcut_backward.activated.connect(self.player.back_forward)
 
         # # Volume up by 10dB
         self.shortcut_volume_up = QShortcut(QKeySequence("Up"), self)
@@ -282,17 +282,17 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
         self.shortcut_volume_down.activated.connect(self.player.volume_down)
 
         # # Aspect ratio
-        # self.shortcut_aspect_ratio = QShortcut(QKeySequence("O"), self)
-        # self.shortcut_aspect_ratio.activated.connect(self.original_scale)
+        self.shortcut_aspect_ratio = QShortcut(QKeySequence("O"), self)
+        self.shortcut_aspect_ratio.activated.connect(self.player.video_set_scale)
 
         # # Show current media timestamp
         # self.shortcut_timestamp = QShortcut(QKeySequence("T"), self)
         # self.shortcut_timestamp.activated.connect(self.media_timestamp)
 
-        # # Next frame timestamp
+        # Next frame
         self.shortcut_next_frame = QShortcut(QKeySequence("E"), self)
         self.shortcut_next_frame.activated.connect(self.player.next_frame)
 
-        # # Media player playback mode
-        # self.shortcut_player_mode = QShortcut(QKeySequence("L"), self)
-        # self.shortcut_player_mode.activated.connect(self.playback_mode)
+        # Media player playback mode
+        self.shortcut_player_mode = QShortcut(QKeySequence("L"), self)
+        self.shortcut_player_mode.activated.connect(self.player.set_playback_mode)
