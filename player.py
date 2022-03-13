@@ -45,6 +45,14 @@ class Player:
         event_manager = self.media_list_player.get_media_player().event_manager()
         event_manager.event_attach(vlc.EventType.MediaPlayerMediaChanged, attach)
 
+    def event_manager_attach_playing(self, attach):
+        """
+        @param: method that is called every time the event is
+        captured by the event manager
+        """
+        event_manager = self.media_list_player.get_media_player().event_manager()
+        event_manager.event_attach(vlc.EventType.MediaPlayerPlaying, attach)
+
     def add_media(self, mrls):
         """
         Add media to playlist
@@ -266,6 +274,17 @@ class Player:
             self.mode = vlc.PlaybackMode.loop
             self.media_list_player.set_playback_mode(self.mode)
             self.set_marquee("Loop: All")
+
+    def media_list_index_of_item(self, *event):
+        """ """
+        media_instance = self.m_instance.get_media()
+        index = self.playlist.index_of_item(media_instance)
+
+        if self.playlist.count() > 0:
+            return index
+        else:
+            # m_instance.release()
+            return -1
 
     def set_window(self, wm_id):
         """
