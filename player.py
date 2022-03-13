@@ -14,10 +14,10 @@ class Player:
         """
 
         # Create media player
-        self.media = vlc.MediaListPlayer()
+        self.media_list_player = vlc.MediaListPlayer()
 
         # Create a media instace of the player
-        self.m_instance = self.media.get_media_player()
+        self.m_instance = self.media_list_player.get_media_player()
 
         # Media playlist
         self.playlist = vlc.MediaList()
@@ -26,23 +26,23 @@ class Player:
         self.mode = vlc.PlaybackMode.loop
 
         # Set default media plsylist mode loop through all the media
-        self.media.set_playback_mode(self.mode)
+        self.media_list_player.set_playback_mode(self.mode)
 
         # Set media playlist
-        self.media.set_media_list(self.playlist)
+        self.media_list_player.set_media_list(self.playlist)
 
     def event_manager(self):
         """
         MediaListPlayer  event manger
         """
-        return self.media.get_media_player().event_manager()
+        return self.media_list_player.get_media_player().event_manager()
 
     def event_manager_attach_changed(self, attach):
         """
         @param: method that is called every time the event is
         captured by the event manager
         """
-        event_manager = self.media.get_media_player().event_manager()
+        event_manager = self.media_list_player.get_media_player().event_manager()
         event_manager.event_attach(vlc.EventType.MediaPlayerMediaChanged, attach)
 
     def add_media(self, mrls):
@@ -57,46 +57,47 @@ class Player:
         """
         Play media playlist
         """
-        self.media.play()
+        self.media_list_player.play()
 
     def stop(self):
         """
         Stop playing media list.
         """
-        return self.media.stop()
+        return self.media_list_player.stop()
 
     def pause(self):
         """
         Toggle pause (or resume) media list.
         """
-        self.media.pause()
+        self.media_list_player.pause()
 
     def resume(self):
         """
         Pause or resume media list.
         """
-        self.media.set_pause(0)
+        self.media_list_player.set_pause(0)
 
     def next(self):
         """
         Play next item from media list.
         @return: 0 upon success -1 if there is no next item.
         """
-        return self.media.next()
+        return self.media_list_player.next()
 
     def previous(self):
         """
         Play previous item from media list.
         @return: 0 upon success -1 if there is no previous item.
         """
-        # self.media.get_media_player().get_media().release()
-        return self.media.previous()
+        # self.media_list_player.get_media_player().get_media().release()
+        print(self.get_meta())
+        return self.media_list_player.previous()
 
     def stop(self):
         """
         Stop playing media list.
         """
-        return self.media.stop()
+        return self.media_list_player.stop()
 
     def mute_audio(self):
         """
@@ -137,14 +138,14 @@ class Player:
         Is media list playing?
         @return: true for playing and false for not playing
         """
-        return self.media.is_playing()
+        return self.media_list_player.is_playing()
 
     def get_state(self):
         """
         Get current state of media list player.
         @return: State for media list player from vlc.State
         """
-        return self.media.get_state()
+        return self.media_list_player.get_state()
 
     def playlist_count(self):
         """
@@ -173,11 +174,21 @@ class Player:
 
         return title
 
+    def get_media_meta(self, mrl):
+        """ "
+        Get the media duration in a playlist instance
+        """
+        media = vlc.Media(mrl)
+        media.parse()
+        duration = media.get_duration()
+        media.parse_stop()
+        return self.convert_ms(duration)
+
     def get_media_length(self):
         """
         Get paying media length in ms
         """
-        return self.convert_ms(self.media.get_media_player().get_length())
+        return self.convert_ms(self.media_list_player.get_media_player().get_length())
 
     def next_frame(self):
         """
@@ -202,7 +213,7 @@ class Player:
         """
         10 seconds fast forward
         """
-        duration = self.media.get_media_player().get_length()
+        duration = self.media_list_player.get_media_player().get_length()
         time = int(self.get_media_current_time())
 
         # check if the media is 1s from ending
@@ -245,15 +256,15 @@ class Player:
         """
         if self.mode == vlc.PlaybackMode.loop:
             self.mode = vlc.PlaybackMode.repeat
-            self.media.set_playback_mode(self.mode)
+            self.media_list_player.set_playback_mode(self.mode)
             self.set_marquee("Loop: One")
         elif self.mode == vlc.PlaybackMode.repeat:
             self.mode = vlc.PlaybackMode.default
-            self.media.set_playback_mode(self.mode)
+            self.media_list_player.set_playback_mode(self.mode)
             self.set_marquee("Loop: Off")
         else:
             self.mode = vlc.PlaybackMode.loop
-            self.media.set_playback_mode(self.mode)
+            self.media_list_player.set_playback_mode(self.mode)
             self.set_marquee("Loop: All")
 
     def set_window(self, wm_id):
