@@ -193,9 +193,6 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
         self.items = []
         self.treeWidget.clear()
 
-        for mrl in enumerate(self.playlist_files):
-            print(vlc.Media(str(mrl)).get_mrl(), vlc.Media(str(mrl)).get_duration())
-
         # add items to tree widget
         for index, basename in enumerate(self.playlist_files):
             # print(basename)
