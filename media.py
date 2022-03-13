@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+import vlc
 
 from player import Player
 from view.ui import Ui_MainWindow
@@ -13,6 +14,7 @@ from PyQt5.QtWidgets import (
     QMenu,
     QFileDialog,
     QShortcut,
+    QTreeWidgetItem,
 )
 from PyQt5.QtGui import QIcon, QKeySequence
 
@@ -49,6 +51,8 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
         self.width = 720
         self.height = 480
 
+        self.playlist_files = []
+
         # Get the desktop screen geometry
         self._SCREEN_WIDTH = QApplication.desktop().width()
         self._SCREEN_HEIGHT = QApplication.desktop().height()
@@ -68,6 +72,9 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
 
         # Bind vlc Instance to Qt Widget
         self.player.set_window(self.videoFrame.winId())
+
+        # Set default media volume
+        self.player.m_instance.audio_set_volume(65)  # 65 dB
 
         # Hide playlist widget
         self.mainFrame.hide()
@@ -173,9 +180,41 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
 
         _, files = scan_files(files_found, ".mp4")
 
+        # sort files based on created time
         files.sort(key=os.path.getctime)
 
         self.set_uri(files)
+
+    def add_playlist_items(self):
+        """
+        Add items to the playlist list Widget
+        """
+
+        self.items = []
+        self.treeWidget.clear()
+
+        for mrl in enumerate(self.playlist_files):
+            print(vlc.Media(str(mrl)).get_mrl(), vlc.Media(str(mrl)).get_duration())
+
+        # add items to tree widget
+        for index, basename in enumerate(self.playlist_files):
+            # print(basename)
+            item = QTreeWidgetItem(
+                [
+                    os.path.basename(basename),
+                    str(self.player.get_media_meta(basename)),
+                    basename,
+                ]
+            )
+            item.setIcon(
+                0, QIcon(QIcon(os.path.join("src", "icons", "film-small.png")))
+            )
+            self.items.append(item)
+            self.treeWidget.insertTopLevelItem(index, item)
+
+        self.treeWidget.headerItem().setText(
+            0, f"Title({self.treeWidget.topLevelItemCount()})"
+        )
 
     def dragEnterEvent(self, event):
         """
@@ -200,6 +239,11 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
         self.player.add_media(mrls)
         if not self.player.is_playing():
             self.player.play()
+
+        [self.playlist_files.append(mrl) for mrl in mrls]
+
+        # playlist items
+        self.add_playlist_items()
 
     @staticmethod
     def convert_qurl_path(urls):
@@ -321,3 +365,7 @@ class MediaPlayer(QMainWindow, Ui_MainWindow):
         # Media player playback mode
         self.shortcut_player_mode = QShortcut(QKeySequence("L"), self)
         self.shortcut_player_mode.activated.connect(self.player.set_playback_mode)
+
+        # Toggle between playlist and video view
+        self.shortcut_toggle_view = QShortcut(QKeySequence("A"), self)
+        self.shortcut_toggle_view.activated.connect(self.toggle_playlist_video_view)
